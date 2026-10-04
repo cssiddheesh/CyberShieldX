@@ -44,6 +44,7 @@ async function request(path, { method = "GET", body, timeout = 15000, signal } =
 
 export const api = {
   get: (path, options) => request(path, options),
+  delete: (path) => request(path, { method: "DELETE" }),
   put: (path, body) => request(path, { method: "PUT", body }),
   post: (path, body, options) => request(path, { method: "POST", body, ...options }),
   upload: async (path, formData, { timeout = 60000, signal } = {}) => {

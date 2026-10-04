@@ -3,7 +3,7 @@ import { Link } from "../router.jsx";
 import { ConfidenceIndicator, RiskBadge } from "./Risk.jsx";
 import { EmptyState } from "./States.jsx";
 
-export function RecentScans({ scans, compact = false }) {
+export function RecentScans({ scans, compact = false, onDelete, deleting = false }) {
   if (!scans.length) {
     return (
       <EmptyState icon="history" title="No saved scans yet"
@@ -19,6 +19,7 @@ export function RecentScans({ scans, compact = false }) {
           <tr>
             <th>When</th><th>Indicator</th><th>Type</th><th>Risk</th>
             {!compact && <th>Confidence</th>}
+            {onDelete && <th>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -32,6 +33,13 @@ export function RecentScans({ scans, compact = false }) {
               <td>{TYPE_LABELS[scan.indicator_type] || scan.indicator_type}</td>
               <td><RiskBadge level={scan.risk_level} score={scan.risk_score} /></td>
               {!compact && <td><ConfidenceIndicator value={scan.confidence} /></td>}
+              {onDelete && (
+                <td>
+                  <button className="btn btn-danger" type="button" disabled={deleting}
+                    aria-label={`Delete scan for ${scan.indicator}`}
+                    onClick={() => onDelete(scan)}>Delete</button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>

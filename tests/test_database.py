@@ -70,6 +70,27 @@ class DatabaseTests(unittest.TestCase):
         self.assertEqual(self.db.list_scans(risk_level="'; DROP TABLE scans;--")["total"], 6)  # ignored safely
         self.assertEqual(self.db.list_scans(limit=-5)["limit"], 1)
 
+    def test_delete_scan_and_all_scans_cascade(self):
+        first = self.scan(65)
+        self.db.save_scan(first)
+        self.db.save_ai_enhancement(first.id, {"summary": "enhanced"})
+        self.assertTrue(self.db.delete_scan(first.id))
+        self.assertFalse(self.db.delete_scan(first.id))
+        self.assertIsNone(self.db.get_scan(first.id))
+        self.assertIsNone(self.db.get_ai_enhancement(first.id))
+
+        second = self.scan(25)
+        third = self.scan(85)
+        self.db.save_scan(second)
+        self.db.save_scan(third)
+        self.db.save_ai_enhancement(second.id, {"summary": "enhanced"})
+        self.assertEqual(self.db.delete_all_scans(), 2)
+        self.assertEqual(self.db.delete_all_scans(), 0)
+        self.assertEqual(self.db.list_scans()["total"], 0)
+        with self.db.connect() as conn:
+            self.assertEqual(conn.execute("SELECT COUNT(*) FROM findings").fetchone()[0], 0)
+            self.assertEqual(conn.execute("SELECT COUNT(*) FROM reports").fetchone()[0], 0)
+
     def test_dashboard_stats(self):
         empty = self.db.dashboard_stats()
         self.assertEqual((empty["total_scans"], empty["posture"]["level"]), (0, "none"))

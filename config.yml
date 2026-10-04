@@ -1,10 +1,7 @@
-  tunnel: 051c69f2-490b-44fb-8bd2-646b9e2a845b
+tunnel: 051c69f2-490b-44fb-8bd2-646b9e2a845b
 credentials-file: C:/Users/jagar/.cloudflared/051c69f2-490b-44fb-8bd2-646b9e2a845b.json
 
 ingress:
-  # Route API traffic to local Python/FastAPI backend
   - hostname: api.cssiddheesh.in
     service: http://127.0.0.1:8000
-
-  # Catch-all rule
   - service: http_status:404

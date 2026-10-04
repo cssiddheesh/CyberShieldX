@@ -200,6 +200,16 @@ class Database:
         ]
         return scan
 
+    def delete_scan(self, scan_id: str) -> bool:
+        with self.connect() as conn:
+            cursor = conn.execute("DELETE FROM scans WHERE id = ?", (scan_id,))
+        return cursor.rowcount > 0
+
+    def delete_all_scans(self) -> int:
+        with self.connect() as conn:
+            cursor = conn.execute("DELETE FROM scans")
+        return cursor.rowcount
+
     @staticmethod
     def _scan_row(row: sqlite3.Row) -> dict[str, Any]:
         return {

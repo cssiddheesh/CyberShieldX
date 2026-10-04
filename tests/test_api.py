@@ -1,6 +1,7 @@
 import unittest
 
 from app.intelligence.registry import SOURCES
+from app.models.evidence import IndicatorType, ScanRecord
 from tests.helpers import make_app
 
 
@@ -71,6 +72,27 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(self.c.get("/api/scans?type=bogus").status_code, 400)
         self.assertEqual(self.c.get("/api/scans/" + "A" * 100).status_code, 404)
         self.assertEqual(self.c.get("/api/scans/CSX-NOPE").status_code, 404)
+
+    def test_delete_scan_endpoints(self):
+        db = self.app.extensions["csx"].db
+        records = [
+            ScanRecord(indicator=f"{n}.example", indicator_type=IndicatorType.DOMAIN,
+                       risk_score=10, confidence=0.5, summary="test")
+            for n in range(3)
+        ]
+        for record in records:
+            db.save_scan(record)
+
+        response = self.c.delete(f"/api/scans/{records[0].id}")
+        self.assertEqual((response.status_code, response.get_json()["deleted"]),
+                         (200, records[0].id))
+        self.assertEqual(self.c.get(f"/api/scans/{records[0].id}").status_code, 404)
+        self.assertEqual(self.c.delete(f"/api/scans/{records[0].id}").status_code, 404)
+
+        response = self.c.delete("/api/scans")
+        self.assertEqual((response.status_code, response.get_json()["deleted"]), (200, 2))
+        self.assertEqual(self.c.get("/api/scans").get_json()["total"], 0)
+        self.assertEqual(self.c.delete("/api/scans").get_json()["deleted"], 0)
 
     def test_errors_are_json_and_methods_enforced(self):
         r = self.c.get("/api/unknown")

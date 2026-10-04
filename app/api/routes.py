@@ -215,6 +215,18 @@ def list_scans():
     return jsonify(ctx().db.list_scans(limit=limit, offset=offset, risk_level=risk, indicator_type=kind))
 
 
+@api.delete("/scans")
+def delete_all_scans():
+    return jsonify({"deleted": ctx().db.delete_all_scans()})
+
+
+@api.delete("/scans/<scan_id>")
+def delete_scan(scan_id: str):
+    if len(scan_id) > 40 or not ctx().db.delete_scan(scan_id):
+        return error("not_found", "Scan not found.", 404)
+    return jsonify({"deleted": scan_id})
+
+
 @api.get("/scans/<scan_id>")
 def get_scan(scan_id: str):
     if len(scan_id) > 40:
