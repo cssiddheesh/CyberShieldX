@@ -1,0 +1,4 @@
+Flask>=3.0,<4
+requests>=2.31
+python-dotenv>=1.0
+reportlab>=3.6,<6  # optional: PDF export only; JSON reports work without it
