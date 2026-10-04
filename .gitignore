@@ -8,3 +8,5 @@ data/*.db-shm
 frontend/node_modules/
 .pytest_cache/
 *.log
+
+cloudflared.exe

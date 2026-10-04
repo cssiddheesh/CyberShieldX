@@ -1,0 +1,10 @@
+tunnel: 1d68cdac-f1c5-4961-8568-0cb9828a2ffa
+credentials-file: C:\Users\jagar\.cloudflared\YOUR_TUNNEL_UUID.json
+
+ingress:
+  # Route API traffic to local Python/FastAPI backend (assuming port 8000)
+  - hostname: https://cybershieldx.pages.dev
+    service: http://localhost:8000
+
+  # Catch-all rule
+  - service: http_status:404
