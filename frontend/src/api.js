@@ -1,3 +1,5 @@
+import { apiUrl } from "./config.js";
+
 export class ApiError extends Error {
   constructor(message, status, code) {
     super(message);
@@ -11,7 +13,7 @@ async function request(path, { method = "GET", body, timeout = 15000, signal } =
   const timer = setTimeout(() => controller.abort(), timeout);
   signal?.addEventListener("abort", () => controller.abort());
   try {
-    const response = await fetch(`/api${path}`, {
+    const response = await fetch(apiUrl(path), {
       method,
       headers: body === undefined ? undefined : { "Content-Type": "application/json" },
       body: body === undefined ? undefined : JSON.stringify(body),
@@ -49,7 +51,7 @@ export const api = {
     const timer = setTimeout(() => controller.abort(), timeout);
     signal?.addEventListener("abort", () => controller.abort());
     try {
-      const response = await fetch(`/api${path}`, { method: "POST", body: formData, signal: controller.signal });
+      const response = await fetch(apiUrl(path), { method: "POST", body: formData, signal: controller.signal });
       let data = null;
       try {
         data = await response.json();
