@@ -2,7 +2,7 @@
   "name": "cybershield-x-frontend",
   "version": "0.1.0",
   "private": true,
-  "description": "CyberShield X web interface (React 19, bundled with esbuild). The built output in dist/ is served by the Python backend.",
+  "description": "CyberShield X web interface (React 19, bundled with esbuild for Flask or Cloudflare Pages).",
   "scripts": {
     "build": "node build.mjs",
     "dev": "node build.mjs --watch"

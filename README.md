@@ -47,8 +47,18 @@ Analyst are not started.
 No API keys are needed. Keys are optional and go in `.env` (created automatically from `.env.example`).
 Providers without a key show **Not configured** and are skipped. Not configured never means "no threat found".
 
-The interface is already built in `frontend/dist`. Only run `build_frontend.bat` (needs Node.js 18+) if you edit
-files in `frontend/src`.
+The interface is built from `frontend/src` into `frontend/dist` with Node.js 18+.
+Run `build_frontend.bat` after editing frontend source.
+
+## Deploy to Cloudflare Pages
+
+Pages hosts the static frontend; the Flask backend and SQLite database must
+continue running on a computer or server. The included Pages Function proxies
+same-origin `/api/*` calls to the backend through a Cloudflare Tunnel. Follow
+[the Cloudflare Pages deployment guide](docs/CLOUDFLARE_PAGES.md) for GitHub,
+Tunnel, Pages build settings, and the required access controls. The backend
+does not currently authenticate users, so protect both public hostnames before
+making the deployment available.
 
 ## Run tests
 
@@ -69,6 +79,7 @@ files in `frontend/src`.
       database/          SQLite layer (scans, findings, reports, sources, settings)
       lab/               Threat Lab question bank (static educational content)
     frontend/            React 19 interface (src/), bundled with esbuild into dist/
+    functions/            Cloudflare Pages API proxy (Pages deployments only)
     tests/               unit and API tests (run: python -m unittest discover -s tests -t .)
     docs/                ARCHITECTURE, API_INTEGRATIONS, SECURITY, DEMO_GUIDE + per-phase logs
 
