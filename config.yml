@@ -3,5 +3,5 @@ credentials-file: C:/Users/jagar/.cloudflared/051c69f2-490b-44fb-8bd2-646b9e2a84
 
 ingress:
   - hostname: api.cssiddheesh.in
-    service: http://127.0.0.1:8000
+    service: http://127.0.0.1:8002
   - service: http_status:404
