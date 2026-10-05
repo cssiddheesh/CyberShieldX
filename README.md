@@ -41,8 +41,12 @@ Analyst are not started.
 ## Run on Windows
 
 1. Install Python 3.10 or newer from python.org (tick "Add python.exe to PATH").
-2. Double-click `run.bat` (first run needs internet to install packages).
-3. Open http://localhost:8000
+2. Double-click `launch.bat` to start the server and Cloudflare tunnel (first run needs internet to install packages).
+3. Open http://localhost:8002 or the public URL configured in `config.yml`.
+
+The launcher opens separate consoles for the server and tunnel and leaves them running.
+Close those consoles to stop the services. The server port in `.env` must match the
+local service port in `config.yml`.
 
 No API keys are needed. Keys are optional and go in `.env` (created automatically from `.env.example`).
 Providers without a key show **Not configured** and are skipped. Not configured never means "no threat found".
